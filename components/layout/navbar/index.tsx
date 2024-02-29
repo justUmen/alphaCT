@@ -1,6 +1,6 @@
 // import Cart from '@/components/cart';
-import Cart from '@/components/Cart';
-import OpenCart from '@/components/cart/open-cart';
+import Cart from "@/components/Cart";
+import OpenCart from "@/components/cart/open-cart";
 // import LogoSquare from 'components/logo-square';
 // import { getMenu } from 'lib/shopify';
 // import { Menu } from 'lib/shopify/types';
@@ -14,7 +14,14 @@ import Search from "./search";
 export default async function Navbar() {
   return (
     <nav className="relative flex items-center justify-between p-4 lg:px-6">
-      <div className="block flex-none md:hidden">MINIMENU</div>
+      <div className="block flex-none md:hidden">
+        <Link
+          href="/search"
+          className="text-neutral-500 underline-offset-4 hover:text-black hover:underline dark:text-neutral-400 dark:hover:text-neutral-300"
+        >
+          All categories
+        </Link>
+      </div>
       <div className="flex w-full items-center">
         <div className="flex w-full md:w-1/3">
           <Link
@@ -62,9 +69,9 @@ export default async function Navbar() {
           </ul>
         </div>
         <div className="hidden justify-center md:flex md:w-1/3">
-        <Suspense fallback={<div>Loading...</div>}>
-          <Search />
-        </Suspense>
+          <Suspense fallback={<div>Loading...</div>}>
+            <Search />
+          </Suspense>
         </div>
         <div className="flex justify-end md:w-1/3">
           <Suspense fallback={<OpenCart />}>
