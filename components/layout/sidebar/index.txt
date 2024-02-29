@@ -1,0 +1,51 @@
+// import Cart from 'components/cart';
+// import OpenCart from 'components/cart/open-cart';
+// import LogoSquare from 'components/logo-square';
+// import { getMenu } from 'lib/shopify';
+// import { Menu } from 'lib/shopify/types';
+
+import Link from 'next/link';
+import { Suspense } from 'react';
+// import MobileMenu from './mobile-menu';
+import { getCategories } from '@/lib/commercetools/queries/getCategories';
+// import Search from './search';
+const { SITE_NAME } = process.env;
+
+export default async function Sidebar() {
+  const menu = await getCategories();
+
+  return (
+    <aside className="fixed top-0 left-0 h-full w-64 p-4 lg:px-6 bg-black shadow-md">
+      <div className="flex flex-col">
+        {/* Adjusted for sidebar logo and site name positioning */}
+        <div className="mb-6">
+          <Link href="/" className="flex items-center justify-center">
+            {/* <LogoSquare /> */}LOGO
+            <span className="ml-2 text-sm font-medium uppercase">SITE NAME</span>
+          </Link>
+        </div>
+
+        {/* If you're using a mobile menu, adjust accordingly */}
+        <div className="mb-6 md:hidden">
+          {/* <MobileMenu menu={menu} /> */}
+        </div>
+
+        {/* Menu Items */}
+        {menu.length ? (
+          <ul className="flex flex-col gap-4">
+            {menu.map((item: any) => (
+              <li key={item.key}>
+                <Link
+                  href={item.key}
+                  className="text-neutral-500 hover:text-black dark:text-neutral-400 dark:hover:text-neutral-300"
+                >
+                  {item.key}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        ) : null}
+      </div>
+    </aside>
+  );
+}

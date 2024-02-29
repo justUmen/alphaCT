@@ -1,0 +1,44 @@
+// @/hooks/useProducts.ts
+'use client'
+import { useState, useEffect } from 'react';
+import { getProductsPage } from '@/lib/commercetools/queries/getProductsPage';
+// import { getProductsPage } from '@/lib/commercetools/queries/getStuff';
+
+interface Product {
+  id: string;
+  name: string;
+  description: string;
+  imageUrl: string;
+  price: number;
+}
+
+export const useProducts = (page: number = 1) => {
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<Error | null>(null);
+  const [products, setProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setLoading(true);
+        const results = await getProductsPage(page);
+        const formattedProducts: Product[] = results.map((product: any) => ({
+          id: product.id,
+          name: product.masterData.current.name,
+          description: product.masterData.current.description,
+          imageUrl: product.masterData.current.masterVariant.images[0].url,
+          price: product.masterData.current.masterVariant.prices[0].value.centAmount / 100,
+        }));
+        setProducts(formattedProducts);
+      } catch (e: any) {
+        setError(e);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, [page]);
+
+  return { loading, error, products };
+};
